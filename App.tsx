@@ -1,117 +1,80 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useState, useCallback } from 'react';
+import { View, Button, StyleSheet, Text } from 'react-native';
+import GoogleAdView from './src/components/ads/google/GoogleAdView';
+import { GoogleAdSDK } from './src/components/ads/google/GoogleAdSDK';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+const App = () => {
+  const [showAd, setShowAd] = useState(false);
+  const [adStatus, setAdStatus] = useState<'idle' | 'loading' | 'loaded' | 'error'>('idle');
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  const handleShowAd = async () => {
+    try {
+      setAdStatus('loading');
+      
+      // Initialize SDK if not already initialized
+      const isInitialized = await GoogleAdSDK.isInitialized();
+      if (!isInitialized) {
+        await GoogleAdSDK.initialize();
+      }
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+      // Load the ad
+      const result = await GoogleAdSDK.loadAd('ca-app-pub-3940256099942544/6300978111');
+      
+      if (result.status === 'success') {
+        setShowAd(true);
+        setAdStatus('loaded');
+      } else {
+        setAdStatus('error');
+      }
+    } catch (error) {
+      console.error('Ad loading failed:', error);
+      setAdStatus('error');
+    }
   };
 
+  const handleAdLoaded = useCallback(() => {
+    console.log('Ad loaded successfully');
+    setAdStatus('loaded');
+  }, []);
+
+  const handleAdFailedToLoad = useCallback((event: { error: string }) => {
+    console.error('Ad failed to load:', event.error);
+    setAdStatus('error');
+  }, []);
+
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+    <View style={styles.container}>
+      <Button 
+        title="Show Ad" 
+        onPress={handleShowAd}
+        disabled={adStatus === 'loading'} 
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      
+      {adStatus === 'loading' && <Text>Loading ad...</Text>}
+      
+      {showAd && (
+        <GoogleAdView
+          adUnitId="ca-app-pub-3940256099942544/6300978111"
+          style={styles.adContainer}
+          onAdLoaded={handleAdLoaded}
+          onAdFailedToLoad={handleAdFailedToLoad}
+        />
+      )}
+    </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 16,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  adContainer: {
+    width: '100%',
+    height: 50,
+    marginTop: 20,
   },
 });
 
