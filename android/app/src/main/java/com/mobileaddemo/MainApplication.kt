@@ -17,6 +17,10 @@ import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.shell.MainReactPackage
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
+import com.mobileaddemo.ads.core.AdManager
+import com.mobileaddemo.ads.core.AdProvider
+import com.mobileaddemo.ads.google.GoogleAdSDK
+import com.mobileaddemo.ads.google.GoogleAdPackage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -30,12 +34,15 @@ import kotlinx.coroutines.withContext
  */
 class MainApplication : Application(), ReactApplication {
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private val googleAdSDK: GoogleAdSDK by lazy { GoogleAdSDK.getInstance(this) }
+    private val adManager: AdManager by lazy { AdManager.getInstance() }
 
     private val _reactNativeHost: ReactNativeHost by lazy {
         object : DefaultReactNativeHost(this) {
             override fun getPackages(): List<ReactPackage> {
                 val packages = PackageList(this).packages.toMutableList()
                 packages.add(MainReactPackage())
+                packages.add(GoogleAdPackage())
                 return packages
             }
 
@@ -67,7 +74,16 @@ class MainApplication : Application(), ReactApplication {
     private fun initializeAdSDKs() {
         applicationScope.launch {
             try {
+                Log.d(TAG, "Starting Ad SDK initialization")
 
+                // Register SDK first
+                adManager.registerSDK(AdProvider.GOOGLE, googleAdSDK)
+
+                // Then initialize
+                val initialized = adManager.initialize(applicationContext)
+                if (!initialized) {
+                    Log.e(TAG, "Failed to initialize one or more Ad SDKs")
+                }else Log.i(TAG, "Successfully initialized Ad SDKs")
             } catch (e: Exception) {
                 Log.e(TAG, "Error initializing Ad SDKs", e)
             }
