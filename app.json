@@ -1,4 +1,7 @@
 {
   "name": "MobileAdDemo",
-  "displayName": "MobileAdDemo"
+  "displayName": "MobileAdDemo",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-2726091127303444~2721976306"
+  }
 }

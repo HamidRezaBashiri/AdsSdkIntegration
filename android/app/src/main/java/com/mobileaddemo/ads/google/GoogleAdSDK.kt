@@ -1,6 +1,7 @@
 package com.mobileaddemo.ads.google
 
 import android.content.Context
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.google.android.gms.ads.AdListener
@@ -10,6 +11,10 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener
+import com.google.ads.mediation.inmobi.InMobiAdapter
+import com.google.ads.mediation.inmobi.InMobiNetworkKeys
+import com.google.ads.mediation.inmobi.InMobiNetworkValues
+import com.google.android.gms.ads.mediation.MediationConfiguration
 import com.mobileaddemo.ads.core.AdError
 import com.mobileaddemo.ads.core.AdResult
 import com.mobileaddemo.ads.core.AdSDK
@@ -37,9 +42,38 @@ class GoogleAdSDK private constructor(private val context: Context) : AdSDK {
 
             suspendCancellableCoroutine { continuation ->
                 try {
+                    // Enable verbose logging for Google Mobile Ads SDK
+                    MobileAds.setRequestConfiguration(
+                        MobileAds.getRequestConfiguration()
+                            .toBuilder()
+                            .setTestDeviceIds(listOf("EMULATOR"))
+                            .build()
+                    )
+                    
                     MobileAds.initialize(context) {
                         initialized = true
                         continuation.resume(true)
+                        // Log mediation adapter status
+                        val statusMap = it.adapterStatusMap
+                        for (adapterClass in statusMap.keys) {
+                            val status = statusMap[adapterClass]
+                            Log.d(TAG, String.format(
+                                "Adapter: %s, Description: %s, Latency: %d",
+                                adapterClass,
+                                status!!.description,
+                                status.latency
+                            ))
+                            
+                            // Specifically check InMobi adapter
+                            if (adapterClass.contains("InMobi")) {
+                                Log.d(TAG, "InMobi adapter initialization state: ${status.initializationState}")
+                                Log.d(TAG, "InMobi adapter description: ${status.description}")
+                                Log.d(TAG, "InMobi adapter latency: ${status.latency}")
+                            }
+                        }
+                    }
+                    MobileAds.openAdInspector(context) {
+
                     }
                 } catch (e: Exception) {
                     Log.e(TAG, "Error initializing Google Ads SDK", e)
@@ -78,7 +112,10 @@ class GoogleAdSDK private constructor(private val context: Context) : AdSDK {
                 }
             }
 
-            val adRequest = AdRequest.Builder().build()
+            val adRequest = AdRequest.Builder()
+                .addNetworkExtrasBundle(InMobiAdapter::class.java, createMediationExtras())
+                .build()
+
             adView.loadAd(adRequest)
         }
 
@@ -95,6 +132,7 @@ class GoogleAdSDK private constructor(private val context: Context) : AdSDK {
         return AdView(context).apply {
             setAdSize(AdSize.BANNER)
             setLayerType(View.LAYER_TYPE_HARDWARE, null)
+            this.adUnitId = adUnitId
         }
     }
 
@@ -129,6 +167,16 @@ class GoogleAdSDK private constructor(private val context: Context) : AdSDK {
     fun getAdViewForKey(viewKey: String): AdView? {
         val adUnitId = viewRegistry[viewKey] ?: return null
         return getOrCreateAdView(adUnitId)
+    }
+
+    private fun createMediationExtras(): Bundle {
+        return Bundle().apply {
+            // InMobi targeting parameters
+            putString(InMobiNetworkKeys.AGE_GROUP, InMobiNetworkValues.BETWEEN_18_AND_24)
+            putString(InMobiNetworkKeys.INTERESTS, "sports,music,technology")
+            putString(InMobiNetworkKeys.LANGUAGE, "en-US")
+            // Add any other targeting parameters you need
+        }
     }
 
     companion object {

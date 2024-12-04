@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -10,59 +10,127 @@ import {
   BannerAd,
   BannerAdSize,
   TestIds,
-  MobileAds,
+  InterstitialAd,
+  AdEventType,
 } from 'react-native-google-mobile-ads';
 
-// Use the test Ad Unit ID for development
+// Ad Unit IDs for different environments
 const GMA_BANNER_AD_UNIT_ID = __DEV__ 
-  ? TestIds.BANNER 
-  : 'ca-app-pub-3940256099942544/6300978111'; // Replace with your actual ad unit ID
+  ? "/23200903920/1914"
+  : "/23200903920/HCN/test_right_mpu1";
 
+const INMOBI_MEDIATION_AD_UNIT_ID = __DEV__
+  ?"/23200903920/testme"
+  : "/23200903920/testme";
+
+// Static placeholder ads for demonstration
 const placeholderAds = [
-  { id: '2', sdk: 'InMobi', ad: 'Placeholder for InMobi Ad' },
+  { id: '2', sdk: 'InMobi', ad: 'InMobi Banner Ad' },
   { id: '3', sdk: 'Prebid', ad: 'Placeholder for Prebid Ad' },
   { id: '4', sdk: 'GAM', ad: 'Placeholder for GAM Auction' },
 ];
 
 const AdScreen = () => {
   const [ads, setAds] = useState([]);
-  const [isAdsInitialized, setIsAdsInitialized] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const refreshTimerRef = useRef(null);
 
+  // Cleanup timer on component unmount
   useEffect(() => {
-    initializeAds();
+    return () => {
+      if (refreshTimerRef.current) {
+        clearTimeout(refreshTimerRef.current);
+      }
+    };
   }, []);
 
-  const initializeAds = async () => {
-    try {
-      await MobileAds().initialize();
-      setIsAdsInitialized(true);
-    } catch (error) {
-      console.error('Failed to initialize ads:', error);
+  // Handle ad refresh every 120 seconds
+  useEffect(() => {
+    if (ads.length > 0) {
+      refreshTimerRef.current = setTimeout(() => {
+        console.log('Refreshing ads - 120s mark');
+        setRefreshKey(prev => prev + 1);
+      }, 120000); // 120 seconds refresh interval
     }
-  };
+
+    return () => {
+      if (refreshTimerRef.current) {
+        clearTimeout(refreshTimerRef.current);
+      }
+    };
+  }, [ads]);
 
   const loadAds = () => {
-    if (ads.length > 0) {
-      setAds([]);
-    } else {
-      setAds([
-        { id: '1', sdk: 'GMA', ad: 'Banner Ad' },
-        ...placeholderAds,
-      ]);
-    }
+    setAds([
+      { id: '1', sdk: 'GMA', ad: 'Banner Ad' },
+      ...placeholderAds,
+    ]);
+    setRefreshKey(prev => prev + 1);
   };
 
   const renderItem = ({ item }) => {
-    if (item.sdk === 'GMA' && isAdsInitialized) {
+    if (item.sdk === 'GMA') {
       return (
         <View style={styles.adContainer}>
           <Text style={styles.sdkName}>GMA</Text>
           <View style={styles.adWrapper}>
             <BannerAd
+              key={`banner-${refreshKey}`}
               unitId={GMA_BANNER_AD_UNIT_ID}
               size={BannerAdSize.BANNER}
               requestOptions={{
                 requestNonPersonalizedAdsOnly: true,
+              }}
+              onAdFailedToLoad={(error) => {
+                console.log('GMA Ad Load Failed:', error.message);
+              }}
+              onAdLoaded={(adInfo) => {
+                console.log('GMA Ad Loaded Successfully');
+                console.log('Full Ad Info:', JSON.stringify(adInfo));
+                
+                // Get adapter information
+                const adapter = adInfo?.responseInfo?.mediationAdapterClassName || 'Unknown';
+                console.log('Loaded by adapter:', adapter);
+                
+                // If you want more detailed information about the adapter
+                const adapterResponse = adInfo?.responseInfo?.loadedAdapterResponseInfo;
+                if (adapterResponse) {
+                  console.log('Adapter Details:', {
+                    adSource: adapterResponse.adSourceName,
+                    latencyMillis: adapterResponse.latencyMillis,
+                    adUnitMapping: adapterResponse.adUnitMapping
+                  });
+                }
+              }}
+            />
+          </View>
+        </View>
+      );
+    }
+
+    if (item.sdk === 'InMobi') {
+      return (
+        <View style={styles.adContainer}>
+          <Text style={styles.sdkName}>InMobi (Mediated)</Text>
+          <View style={styles.adWrapper}>
+            <BannerAd
+              key={`inmobi-${refreshKey}`}
+              unitId={INMOBI_MEDIATION_AD_UNIT_ID}
+              size={BannerAdSize.BANNER}
+              requestOptions={{
+                requestNonPersonalizedAdsOnly: true,
+              }}
+              onAdFailedToLoad={(error) => {
+                console.log('InMobi Ad Load Failed:', error.message);
+              }}
+              onAdLoaded={() => {
+                console.log(`InMobi Ad Loaded Successfully `);
+              }}
+              onPaid={(event) => {
+                console.log('InMobi Ad Paid:', {
+                  currency: event.currency,
+                  value: event.value
+                });
               }}
             />
           </View>
@@ -83,9 +151,7 @@ const AdScreen = () => {
       <Text style={styles.title}>Ad Integration Demo</Text>
 
       <TouchableOpacity style={styles.button} onPress={loadAds}>
-        <Text style={styles.buttonText}>
-          {ads.length > 0 ? 'Clear Ads' : 'Load Ads'}
-        </Text>
+        <Text style={styles.buttonText}>Load Ads</Text>
       </TouchableOpacity>
 
       <FlatList
@@ -154,6 +220,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     color: '#aaa',
+  },
+  banner: {
+    width: 320,
+    height: 50,
+    alignSelf: 'center',
   },
 });
 
