@@ -9,7 +9,9 @@ import mobileAds from 'react-native-google-mobile-ads';
 
 mobileAds()
   .initialize()
-  .then(() => console.log('Google Mobile Ads Initialized'));
+  .then((adapterStatuses) => {
+    console.log(adapterStatuses);
+    console.log('Google Mobile Ads Initialized');
+  });
 
-  
 AppRegistry.registerComponent(appName, () => App);

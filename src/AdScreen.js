@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -10,60 +10,88 @@ import {
   BannerAd,
   BannerAdSize,
   TestIds,
-  MobileAds,
 } from 'react-native-google-mobile-ads';
+import InMobiBanner from './components/InMobiBanner';
 
 // Use the test Ad Unit ID for development
 const GMA_BANNER_AD_UNIT_ID = __DEV__ 
   ? TestIds.BANNER 
-  : 'ca-app-pub-3940256099942544/6300978111'; // Replace with your actual ad unit ID
+  : 'ca-app-pub-XXXXX/YYYY';
 
 const placeholderAds = [
-  { id: '2', sdk: 'InMobi', ad: 'Placeholder for InMobi Ad' },
+  { id: '2', sdk: 'InMobi', ad: 'InMobi Banner Ad' },
   { id: '3', sdk: 'Prebid', ad: 'Placeholder for Prebid Ad' },
   { id: '4', sdk: 'GAM', ad: 'Placeholder for GAM Auction' },
 ];
 
 const AdScreen = () => {
   const [ads, setAds] = useState([]);
-  const [isAdsInitialized, setIsAdsInitialized] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const refreshTimerRef = useRef(null);
 
   useEffect(() => {
-    initializeAds();
+    return () => {
+      if (refreshTimerRef.current) {
+        clearTimeout(refreshTimerRef.current);
+      }
+    };
   }, []);
 
-  const initializeAds = async () => {
-    try {
-      await MobileAds().initialize();
-      setIsAdsInitialized(true);
-    } catch (error) {
-      console.error('Failed to initialize ads:', error);
+  useEffect(() => {
+    if (ads.length > 0) {
+      refreshTimerRef.current = setTimeout(() => {
+        console.log('Refreshing ads - 60s mark');
+        setRefreshKey(prev => prev + 1);
+        
+        refreshTimerRef.current = setTimeout(() => {
+          console.log('Refreshing ads - 180s mark');
+          setRefreshKey(prev => prev + 1);
+        }, 120000);
+      }, 60000);
     }
-  };
+
+    return () => {
+      if (refreshTimerRef.current) {
+        clearTimeout(refreshTimerRef.current);
+      }
+    };
+  }, [ads]);
 
   const loadAds = () => {
-    if (ads.length > 0) {
-      setAds([]);
-    } else {
-      setAds([
-        { id: '1', sdk: 'GMA', ad: 'Banner Ad' },
-        ...placeholderAds,
-      ]);
-    }
+    setAds([
+      { id: '1', sdk: 'GMA', ad: 'Banner Ad' },
+      ...placeholderAds,
+    ]);
+    setRefreshKey(prev => prev + 1);
   };
 
   const renderItem = ({ item }) => {
-    if (item.sdk === 'GMA' && isAdsInitialized) {
+    if (item.sdk === 'GMA') {
       return (
         <View style={styles.adContainer}>
           <Text style={styles.sdkName}>GMA</Text>
           <View style={styles.adWrapper}>
             <BannerAd
-              unitId={GMA_BANNER_AD_UNIT_ID}
+              key={`banner-${refreshKey}`}
+              unitId={"ca-app-pub-2726091127303444/23201868728"}
               size={BannerAdSize.BANNER}
               requestOptions={{
                 requestNonPersonalizedAdsOnly: true,
               }}
+            />
+          </View>
+        </View>
+      );
+    }
+
+    if (item.sdk === 'InMobi') {
+      return (
+        <View style={styles.adContainer}>
+          <Text style={styles.sdkName}>InMobi</Text>
+          <View style={styles.adWrapper}>
+            <InMobiBanner
+              key={`inmobi-${refreshKey}`}
+              style={styles.banner}
             />
           </View>
         </View>
@@ -83,9 +111,7 @@ const AdScreen = () => {
       <Text style={styles.title}>Ad Integration Demo</Text>
 
       <TouchableOpacity style={styles.button} onPress={loadAds}>
-        <Text style={styles.buttonText}>
-          {ads.length > 0 ? 'Clear Ads' : 'Load Ads'}
-        </Text>
+        <Text style={styles.buttonText}>Load Ads</Text>
       </TouchableOpacity>
 
       <FlatList
@@ -154,6 +180,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     color: '#aaa',
+  },
+  banner: {
+    width: 320,
+    height: 50,
+    alignSelf: 'center',
   },
 });
 

@@ -21,6 +21,8 @@ import com.mobileaddemo.ads.core.AdManager
 import com.mobileaddemo.ads.core.AdProvider
 import com.mobileaddemo.ads.google.GoogleAdSDK
 import com.mobileaddemo.ads.google.GoogleAdPackage
+import com.mobileaddemo.ads.inmobi.InMobiAdSDK
+import com.mobileaddemo.ads.inmobi.InMobiAdPackage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -35,6 +37,7 @@ import kotlinx.coroutines.withContext
 class MainApplication : Application(), ReactApplication {
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val googleAdSDK: GoogleAdSDK by lazy { GoogleAdSDK.getInstance(this) }
+    private val inMobiAdSDK: InMobiAdSDK by lazy { InMobiAdSDK.getInstance(this) }
     private val adManager: AdManager by lazy { AdManager.getInstance() }
 
     private val _reactNativeHost: ReactNativeHost by lazy {
@@ -43,6 +46,7 @@ class MainApplication : Application(), ReactApplication {
                 val packages = PackageList(this).packages.toMutableList()
                 packages.add(MainReactPackage())
                 packages.add(GoogleAdPackage())
+                packages.add(InMobiAdPackage())
                 return packages
             }
 
@@ -76,14 +80,17 @@ class MainApplication : Application(), ReactApplication {
             try {
                 Log.d(TAG, "Starting Ad SDK initialization")
 
-                // Register SDK first
+                // Register SDKs
                 adManager.registerSDK(AdProvider.GOOGLE, googleAdSDK)
+                adManager.registerSDK(AdProvider.INMOBI, inMobiAdSDK)
 
-                // Then initialize
+                // Initialize
                 val initialized = adManager.initialize(applicationContext)
                 if (!initialized) {
                     Log.e(TAG, "Failed to initialize one or more Ad SDKs")
-                }else Log.i(TAG, "Successfully initialized Ad SDKs")
+                } else {
+                    Log.i(TAG, "Successfully initialized Ad SDKs")
+                }
             } catch (e: Exception) {
                 Log.e(TAG, "Error initializing Ad SDKs", e)
             }

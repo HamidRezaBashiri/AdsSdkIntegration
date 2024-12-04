@@ -6,7 +6,11 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
@@ -14,13 +18,17 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme"
+      android:hardwareAccelerated="true"
       android:supportsRtl="true">
       
       <!-- Add tools:replace to resolve the conflict -->
-      <meta-data
-        android:name="com.google.android.gms.ads.APPLICATION_ID"
-        android:value="ca-app-pub-2726091127303444~6936799273"
-        tools:replace="android:value"/>
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-2726091127303444~2721976306"
+            tools:replace="android:value"/>
+        <meta-data
+            android:name="com.inmobi.sdk.accountid"
+            android:value="bfb3f72fbd8345978f7c37d0fa8f09a2" />
         
       <activity
         android:name=".MainActivity"

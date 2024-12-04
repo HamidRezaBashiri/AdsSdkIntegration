@@ -40,6 +40,16 @@ class GoogleAdSDK private constructor(private val context: Context) : AdSDK {
                     MobileAds.initialize(context) {
                         initialized = true
                         continuation.resume(true)
+                        val statusMap = it.adapterStatusMap
+                        for (adapterClass in statusMap.keys) {
+                            val status = statusMap[adapterClass]
+                            Log.d(
+                                    "MyApp", String.format(
+                                    "Adapter name: %s, Description: %s, Latency: %d",
+                                    adapterClass, status!!.description, status.latency
+                                )
+                            )
+                        }
                     }
                 } catch (e: Exception) {
                     Log.e(TAG, "Error initializing Google Ads SDK", e)
