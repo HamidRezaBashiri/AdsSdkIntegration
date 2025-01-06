@@ -23,6 +23,7 @@ import com.mobileaddemo.ads.google.GoogleAdSDK
 import com.mobileaddemo.ads.google.GoogleAdPackage
 import com.mobileaddemo.ads.inmobi.InMobiAdSDK
 import com.mobileaddemo.ads.inmobi.InMobiAdPackage
+import com.mobileaddemo.ads.prebid.PrebidSDK
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -38,6 +39,7 @@ class MainApplication : Application(), ReactApplication {
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val googleAdSDK: GoogleAdSDK by lazy { GoogleAdSDK.getInstance(this) }
     private val inMobiAdSDK: InMobiAdSDK by lazy { InMobiAdSDK.getInstance(this) }
+    private val prebidSDK: PrebidSDK by lazy { PrebidSDK.getInstance(this) }
     private val adManager: AdManager by lazy { AdManager.getInstance() }
 
     private val _reactNativeHost: ReactNativeHost by lazy {
@@ -81,8 +83,10 @@ class MainApplication : Application(), ReactApplication {
                 Log.d(TAG, "Starting Ad SDK initialization")
 
                 // Register SDKs
-            //    adManager.registerSDK(AdProvider.GOOGLE, googleAdSDK)
+
+               adManager.registerSDK(AdProvider.GOOGLE, googleAdSDK)
                adManager.registerSDK(AdProvider.INMOBI, inMobiAdSDK)
+               adManager.registerSDK(AdProvider.PREBID, prebidSDK)
 
                 // Initialize
                 val initialized = adManager.initialize(applicationContext)

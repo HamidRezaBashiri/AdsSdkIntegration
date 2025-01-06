@@ -112,7 +112,7 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 
-    implementation("com.google.android.gms:play-services-ads:23.6.0")
+    implementation("com.google.android.gms:play-services-ads:23.1.0")
 
 //    implementation("com.inmobi.monetization:inmobi-ads-kotlin:10.8.0")
     implementation("com.google.ads.mediation:inmobi:10.8.0.0")
@@ -124,7 +124,7 @@ dependencies {
     implementation("androidx.multidex:multidex:2.0.1")
     implementation ("com.google.android.gms:play-services-ads-identifier:18.1.0")
 
-    implementation("org.prebid:prebid-mobile-sdk:2.0.4")
+    implementation("org.prebid:prebid-mobile-sdk:2.3.1")
 
     // Kotlin Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")

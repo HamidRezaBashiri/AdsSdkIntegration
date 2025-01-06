@@ -16,12 +16,12 @@ import {
 
 // Ad Unit IDs for different environments
 const GMA_BANNER_AD_UNIT_ID = __DEV__ 
-  ? "/23200903920/1914"
-  : "/23200903920/HCN/test_right_mpu1";
+  ? "/23200903920/HCN/test_devteamBG_mpu4"
+  : "/23200903920/HCN/test_devteamBG_mpu3";
 
 const INMOBI_MEDIATION_AD_UNIT_ID = __DEV__
-  ?"/23200903920/testme"
-  : "/23200903920/testme";
+  ?"/23200903920/HCN/test_devteamBG_mpu3"
+  : "/23200903920/testmme";
 
 // Static placeholder ads for demonstration
 const placeholderAds = [
