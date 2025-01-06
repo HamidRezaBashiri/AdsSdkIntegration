@@ -90,10 +90,12 @@ class MainApplication : Application(), ReactApplication {
 
                 // Initialize
                 val initialized = adManager.initialize(applicationContext)
+
                 if (!initialized) {
                     Log.e(TAG, "Failed to initialize one or more Ad SDKs")
                 } else {
                     Log.i(TAG, "Successfully initialized Ad SDKs")
+
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error initializing Ad SDKs", e)

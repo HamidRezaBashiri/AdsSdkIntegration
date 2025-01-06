@@ -3,7 +3,12 @@
  import android.content.Context
  import android.util.Log
  import android.view.View
+ import com.google.android.gms.ads.AdListener
+ import com.google.android.gms.ads.AdSize
+ import com.google.android.gms.ads.LoadAdError
  import com.google.android.gms.ads.MobileAds
+ import com.google.android.gms.ads.admanager.AdManagerAdRequest
+ import com.google.android.gms.ads.admanager.AdManagerAdView
  import com.inmobi.ads.InMobiBanner
  import com.mobileaddemo.ads.core.AdResult
  import com.mobileaddemo.ads.core.AdSDK
@@ -13,11 +18,9 @@
  import kotlinx.coroutines.flow.callbackFlow
  import kotlinx.coroutines.suspendCancellableCoroutine
  import kotlinx.coroutines.withContext
+ import org.prebid.mobile.BannerAdUnit
  import org.prebid.mobile.Host
  import org.prebid.mobile.PrebidMobile
- import org.prebid.mobile.api.data.InitializationStatus
- import org.prebid.mobile.api.exceptions.InitError
- import org.prebid.mobile.rendering.listeners.SdkInitializationListener
  import java.util.concurrent.ConcurrentHashMap
  import kotlin.coroutines.resume
 
@@ -36,29 +39,27 @@
                  try {
                      PrebidMobile.setPrebidServerAccountId("0689a263-318d-448b-a3d4-b02e8a709d9d")
 
+                     PrebidMobile.setPrebidServerHost(Host.createCustomHost("https://prebid-server-test-j.prebid.org/openrtb2/auction"))
+
 //                   PrebidMobile.setPrebidServerHost(Host.APPNEXUS)
 
-                     PrebidMobile.setPrebidServerHost(Host.createCustomHost("https://prebid-server-test-j.prebid.org/openrtb2/auction"))
 //                     PrebidMobile.setCustomStatusEndpoint(PREBID_SERVER_STATUS_ENDPOINT)
 
-                     // If you have opted to host your own Prebid Server solution you will need to store the url to the server in your app. Make sure that your URL points to the /openrtb2/auction endpoint.
 //                     stored auction responses signal Prebid Server to respond with a static response matching the storedAuctionResponse found in the Prebid Server Database, useful for debugging and integration testing.
                      PrebidMobile.setStoredAuctionResponse("prebid-demo-banner-320-50")
                      PrebidMobile.setPbsDebug(true)
                      PrebidMobile.setLogLevel(PrebidMobile.LogLevel.DEBUG)
-
-
-//                     During the initialization, SDK creates internal classes and performs the health check request to the /status endpoint. If you use a custom PBS host you should provide a custom status endpoint as well:
-//
+                     //Check compatibility with your GMA SDK
+                     PrebidMobile.checkGoogleMobileAdsCompatibility(MobileAds.getVersion().toString())
 
                      // Initialize the Prebid SDK
-                     PrebidMobile.initializeSdk(context
-                     ) { status ->
+                     PrebidMobile.initializeSdk(context) { status ->
+                         initialized = true
                          Log.i(TAG, "onInitializationComplete: $status ")
+                         continuation.resume(true)
+
                      }
 
-//Check compatibility with your GMA SDK
-                     PrebidMobile.checkGoogleMobileAdsCompatibility(MobileAds.getVersion().toString())
 
 
                  } catch (e: Exception) {
@@ -81,8 +82,34 @@
              return@callbackFlow
          }
 
+         val  adUnit = BannerAdUnit("prebid-demo-banner-320-50"	, 320, 50)
+
+         val adView = AdManagerAdView(context)
+         adView.adUnitId = "prebid-demo-banner-320-50"
+         adView.setAdSizes(AdSize.BANNER)
+         adView.adListener = object : AdListener() {
+             override fun onAdLoaded() {
+                 Log.d("Prebid", "Ad loaded")
+             }
+
+             override fun onAdFailedToLoad(p0: LoadAdError) {
+                 Log.e(TAG, "onAdFailedToLoad: $p0", )
+                 super.onAdFailedToLoad(p0)
+             }
+         }
 //         withContext(Dispatchers.Main) {
-//             val banner = getOrCreateAdView(adUnitId) as InMobiBanner
+//          val adView = getOrCreateAdView(adUnitId)
+
+         // Add GMA SDK banner view to the app UI
+//         adWrapperView.addView(adView)
+
+         // 4. Make a bid request to Prebid Server
+         val request = AdManagerAdRequest.Builder().build()
+         adUnit.fetchDemand( request) {
+             // 5. Load GAM Ad
+             Log.i(TAG, "loadAd: ")
+             adView.loadAd(request)
+         }
 //
 //             trySend(AdResult.Loading(adUnitId))
 //
@@ -120,10 +147,18 @@
      }
 
      override fun createAdView(context: Context, adUnitId: String): View {
-         return InMobiBanner(context, adUnitId.toLong()).apply {
-             setAnimationType(InMobiBanner.AnimationType.ANIMATION_OFF)
-             setEnableAutoRefresh(false)
+
+
+         val adView = AdManagerAdView(context)
+         adView.adUnitId = "prebid-demo-banner-320-50"
+         adView.setAdSizes(AdSize.BANNER)
+         adView.adListener = object : AdListener() {
+             override fun onAdLoaded() {
+                 Log.d("Prebid", "Ad loaded")
+             }
          }
+
+         return adView
      }
 
      override fun cleanup(adUnitId: String) {
