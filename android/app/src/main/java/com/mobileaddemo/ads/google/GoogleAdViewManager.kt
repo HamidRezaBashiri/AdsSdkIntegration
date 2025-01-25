@@ -22,10 +22,20 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 
+/**
+ * This class in not used in current usecase
+ * Manager class for Google AdView, used to manage ad views in a React Native application.
+ */
 class GoogleAdViewManager : SimpleViewManager<GoogleAdViewManager.AdContainer>() {
 
+    /**
+     * Returns the name of this view manager, used in JavaScript.
+     */
     override fun getName(): String = "GoogleAdView"
 
+    /**
+     * Inner class representing the container for the AdView.
+     */
     inner class AdContainer(context: ThemedReactContext) : FrameLayout(context) {
         var adView: AdView? = null
             private set
@@ -294,4 +304,4 @@ class GoogleAdViewManager : SimpleViewManager<GoogleAdViewManager.AdContainer>()
         const val EVENT_AD_CLICKED = "onAdClicked"
         const val EVENT_AD_IMPRESSION = "onAdImpression"
     }
-} 
+}

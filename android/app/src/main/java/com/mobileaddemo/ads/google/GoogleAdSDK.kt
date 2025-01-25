@@ -27,7 +27,7 @@ import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
 import java.util.concurrent.ConcurrentHashMap
 import java.util.Collections
-
+//this file is not used in current usecase 
 class GoogleAdSDK private constructor(private val context: Context) : AdSDK {
     private var initialized = false
     private val viewRegistry = mutableMapOf<String, String>() // viewKey -> adUnitId
@@ -36,10 +36,17 @@ class GoogleAdSDK private constructor(private val context: Context) : AdSDK {
 
     override val name: String = "Google Ads"
 
+    /**
+     * Initializes the Google Mobile Ads SDK.
+     * @param context The application context.
+     * @return Boolean indicating if the SDK was successfully initialized.
+     */
     override suspend fun initialize(context: Context): Boolean = withContext(Dispatchers.IO) {
         try {
+            // If already initialized, return true
             if (initialized) return@withContext true
 
+            // Suspend the coroutine until the initialization is complete
             suspendCancellableCoroutine { continuation ->
                 try {
                     // Enable verbose logging for Google Mobile Ads SDK
@@ -49,39 +56,20 @@ class GoogleAdSDK private constructor(private val context: Context) : AdSDK {
                             .setTestDeviceIds(listOf("EMULATOR"))
                             .build()
                     )
-                    
-                    MobileAds.initialize(context) {
+                    // Initialize the Google Mobile Ads SDK
+                    MobileAds.initialize(context) { initializationStatus ->
+                        // Mark as initialized and resume the coroutine
                         initialized = true
                         continuation.resume(true)
-                        // Log mediation adapter status
-                        val statusMap = it.adapterStatusMap
-                        for (adapterClass in statusMap.keys) {
-                            val status = statusMap[adapterClass]
-                            Log.d(TAG, String.format(
-                                "Adapter: %s, Description: %s, Latency: %d",
-                                adapterClass,
-                                status!!.description,
-                                status.latency
-                            ))
-                            
-                            // Specifically check InMobi adapter
-                            if (adapterClass.contains("InMobi")) {
-                                Log.d(TAG, "InMobi adapter initialization state: ${status.initializationState}")
-                                Log.d(TAG, "InMobi adapter description: ${status.description}")
-                                Log.d(TAG, "InMobi adapter latency: ${status.latency}")
-                            }
-                        }
-                    }
-                    MobileAds.openAdInspector(context) {
-
                     }
                 } catch (e: Exception) {
-                    Log.e(TAG, "Error initializing Google Ads SDK", e)
+                    // If initialization fails, resume the coroutine with false
                     continuation.resume(false)
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error in initialize", e)
+            // If an exception occurs, log it and return false
+            Log.e("GoogleAdSDK", "Initialization failed", e)
             false
         }
     }
@@ -190,4 +178,4 @@ class GoogleAdSDK private constructor(private val context: Context) : AdSDK {
                 instance ?: GoogleAdSDK(context.applicationContext).also { instance = it }
             }
     }
-} 
+}

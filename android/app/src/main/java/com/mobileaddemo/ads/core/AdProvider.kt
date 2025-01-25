@@ -1,7 +1,10 @@
 package com.mobileaddemo.ads.core
 
+/**
+ * Enum class representing different advertisement providers.
+ */
 enum class AdProvider {
-    GOOGLE,
-    INMOBI,
-    PREBID
-} 
+    GOOGLE,  // Google Ad Provider
+    INMOBI,  // InMobi Ad Provider
+    PREBID   // Prebid Ad Provider
+}

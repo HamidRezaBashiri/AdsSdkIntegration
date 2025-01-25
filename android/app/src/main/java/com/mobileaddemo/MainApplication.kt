@@ -23,6 +23,7 @@ import com.mobileaddemo.ads.google.GoogleAdSDK
 import com.mobileaddemo.ads.google.GoogleAdPackage
 import com.mobileaddemo.ads.inmobi.InMobiAdSDK
 import com.mobileaddemo.ads.inmobi.InMobiAdPackage
+import com.mobileaddemo.ads.prebid.PrebidPackage
 import com.mobileaddemo.ads.prebid.PrebidSDK
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,6 +50,7 @@ class MainApplication : Application(), ReactApplication {
                 packages.add(MainReactPackage())
                 packages.add(GoogleAdPackage())
                 packages.add(InMobiAdPackage())
+                packages.add(PrebidPackage())
                 return packages
             }
 
@@ -95,7 +97,9 @@ class MainApplication : Application(), ReactApplication {
                     Log.e(TAG, "Failed to initialize one or more Ad SDKs")
                 } else {
                     Log.i(TAG, "Successfully initialized Ad SDKs")
-
+//                    applicationScope.launch {
+//                        prebidSDK.loadAd("")
+//                    }
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error initializing Ad SDKs", e)

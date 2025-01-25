@@ -12,6 +12,7 @@ import com.inmobi.ads.InMobiAdRequestStatus
 import com.inmobi.ads.InMobiBanner
 import com.inmobi.ads.listeners.BannerAdEventListener
 
+// this file is not used in current implementation
 class InMobiViewManager(
     private val reactContext: ReactApplicationContext
 ) : SimpleViewManager<View>() {
