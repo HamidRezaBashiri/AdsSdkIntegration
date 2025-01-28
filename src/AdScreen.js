@@ -10,7 +10,7 @@ import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 import PrebidAdView from './components/PrebidAdView';
 
 const PREBID_CONFIG_ID = 'prebid-demo-banner-320-50';
-const PREBID_GAM_AD_UNIT_ID = '/6499/example/banner';
+const PREBID_GAM_AD_UNIT_ID = '/23200903920/HCN/test_devteamBG_mpu4';
 const GMA_BANNER_AD_UNIT_ID = '/23200903920/HCN/test_devteamBG_mpu4';
 const INMOBI_BANNER_AD_UNIT_ID = '/23200903920/HCN/test_devteamBG_mpu3';
 

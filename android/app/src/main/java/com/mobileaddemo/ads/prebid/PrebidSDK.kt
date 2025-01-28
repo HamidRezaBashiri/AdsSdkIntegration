@@ -59,10 +59,11 @@ class PrebidSDK private constructor(private val context: Context) : AdSDK {
         }
 
         try {
-                setPrebidServerAccountId("0689a263-318d-448b-a3d4-b02e8a709d9d")
-                setPrebidServerHost(Host.createCustomHost("https://prebid-server-test-j.prebid.org/openrtb2/auction"))
-                setLogLevel(org.prebid.mobile.PrebidMobile.LogLevel.DEBUG)
-                setPbsDebug(true)
+                PrebidMobile.setPrebidServerAccountId("1481")
+                PrebidMobile.setPrebidServerHost(Host.createCustomHost("https://mp.4dex.io/pbs/openrtb2/auction"))
+                PrebidMobile.setCustomStatusEndpoint("https://mp.4dex.io/healthcheck")
+                PrebidMobile.setLogLevel(org.prebid.mobile.PrebidMobile.LogLevel.DEBUG)
+                PrebidMobile.setPbsDebug(true)
 
             Handler(Looper.getMainLooper()).post {
                 PrebidMobile.initializeSdk(context) { status ->
