@@ -1,8 +1,10 @@
 package com.mobileaddemo.ads.core
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 /**
  * Interface defining the contract for ad network SDK implementations
@@ -31,15 +33,45 @@ interface AdSDK {
      * @param adUnitId The unique identifier for the ad placement
      * @return Flow emitting [AdResult] states during the ad loading process
      */
-    suspend fun loadAd(adUnitId: String): Flow<AdResult>
+    // Default implementation for loadAd with configId and adUnitId
+    suspend fun loadAd(configId: String, adUnitId: String): Flow<AdResult> = callbackFlow {
+        Log.e("AdSDK", "Default implementation: loadAd(configId, adUnitId) not implemented.")
+        trySend(AdResult.Error(configId, "Method not implemented"))
+        close()
+    }
 
+    // Default implementation for loadAd with only adUnitId
+    suspend fun loadAd(adUnitId: String): Flow<AdResult> = callbackFlow {
+        Log.e("AdSDK", "Default implementation: loadAd(adUnitId) not implemented.")
+        trySend(AdResult.Error(adUnitId, "Method not implemented"))
+        close()
+    }
     /**
      * Creates an ad view for the given ad unit
      * @param context Application context
      * @param adUnitId The unique identifier for the ad placement
      * @return Ad view
      */
-    fun createAdView(context: Context, adUnitId: String): View
+    fun createAdView(context: Context, adUnitId: String): View{
+        Log.e("AdSDK", "Default implementation: not implemented.")
+//        trySend(AdResult.Error(adUnitId, "Method not implemented"))
+//        close()
+        return TODO("Provide the return value")
+    }
+
+    /**
+     * Creates an ad view with additional configuration.
+     * @param context Application context.
+     * @param adUnitId The unique identifier for the ad placement.
+     * @param configId The unique identifier for the ad configuration.
+     * @return Ad view.
+     */
+    fun createAdView(context: Context, adUnitId: String, configId: String): View{
+        Log.e("AdSDK", "Default implementation: not implemented.")
+//        trySend(AdResult.Error(adUnitId, "Method not implemented"))
+//        close()
+        return TODO("Provide the return value")
+    }
 
     /**
      * Cleans up resources for the given ad unit
@@ -57,7 +89,23 @@ interface AdSDK {
      * @param adUnitId The unique identifier for the ad placement
      * @return Ad view
      */
-    fun getOrCreateAdView(adUnitId: String): View
+    fun getOrCreateAdView(adUnitId: String): View{
+        Log.e("AdSDK", "Default implementation: not implemented.")
+//        trySend(AdResult.Error(adUnitId, "Method not implemented"))
+//        close()
+        return TODO("Provide the return value")
+    }
+    /**
+     * Gets or creates an ad view for the given ad unit
+     * @param adUnitId The unique identifier for the ad placement
+     * @return Ad view
+     */
+     fun getOrCreateAdView(adUnitId: String, configId: String): View{
+        Log.e("AdSDK", "Default implementation: not implemented.")
+//        trySend(AdResult.Error(adUnitId, "Method not implemented"))
+//        close()
+        return TODO("Provide the return value")
+    }
 }
 
 /**

@@ -11,6 +11,6 @@ class PrebidPackage : ReactPackage {
     }
 
     override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-        return listOf(PrebidAdViewManager())
+        return listOf(PrebidAdViewManager(reactContext))
     }
 }
