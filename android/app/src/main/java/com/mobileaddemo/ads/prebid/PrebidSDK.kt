@@ -31,6 +31,7 @@ import org.prebid.mobile.PrebidMobile.setPbsDebug
 import org.prebid.mobile.PrebidMobile.setPrebidServerAccountId
 import org.prebid.mobile.PrebidMobile.setPrebidServerHost
 import org.prebid.mobile.api.data.InitializationStatus
+import org.prebid.mobile.TargetingParams
 import kotlin.coroutines.resume
 
 class PrebidSDK private constructor(private val context: Context) : AdSDK {
@@ -53,15 +54,22 @@ class PrebidSDK private constructor(private val context: Context) : AdSDK {
         get() = "PrebidAdView"
 
     override suspend fun initialize(context: Context): Boolean = suspendCancellableCoroutine { continuation ->
+        Log.d(TAG, "Initializing Prebid SDK")
         if (initialized) {
             continuation.resume(true) { Log.d(TAG, "Initialization cancelled") }
             return@suspendCancellableCoroutine
         }
 
         try {
-                PrebidMobile.setPrebidServerAccountId("1481")
-                PrebidMobile.setPrebidServerHost(Host.createCustomHost("https://mp.4dex.io/pbs/openrtb2/auction"))
-                PrebidMobile.setCustomStatusEndpoint("https://mp.4dex.io/healthcheck")
+                // Adagio Prebid Server
+                // PrebidMobile.setPrebidServerAccountId("1481")
+                // PrebidMobile.setPrebidServerHost(Host.createCustomHost("https://mp.4dex.io/pbs/openrtb2/auction"))
+                // PrebidMobile.setCustomStatusEndpoint("https://mp.4dex.io/healthcheck")
+                TargetingParams.setBundleName("com.hcn.tabletnavigatorpublic")
+                // Test Prebid Server
+                PrebidMobile.setPrebidServerAccountId("0689a263-318d-448b-a3d4-b02e8a709d9d")
+                PrebidMobile.setPrebidServerHost(Host.createCustomHost("https://prebid-server-test-j.prebid.org/openrtb2/auction"))
+                PrebidMobile.setIncludeWinnersFlag(true)
                 PrebidMobile.setLogLevel(org.prebid.mobile.PrebidMobile.LogLevel.DEBUG)
                 PrebidMobile.setPbsDebug(true)
 
@@ -121,6 +129,9 @@ class PrebidSDK private constructor(private val context: Context) : AdSDK {
      private suspend fun createAdRequest(configId: String): AdManagerAdRequest = suspendCancellableCoroutine { continuation ->
         val adUnit = BannerAdUnit(configId, DEFAULT_AD_SIZE.width, DEFAULT_AD_SIZE.height)
          val builder = AdManagerAdRequest.Builder()
+         builder.addCustomTargeting("hb_service_provider", "authdev");
+        //  builder.addCustomTargeting("hb_bidid", "%%BIDID%%")
+
 
          adUnit.fetchDemand(builder.build()) { resultCode ->
              if (resultCode == org.prebid.mobile.ResultCode.SUCCESS) {

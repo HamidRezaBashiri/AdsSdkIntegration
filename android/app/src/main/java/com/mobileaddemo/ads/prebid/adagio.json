@@ -1,0 +1,63 @@
+{
+    "id": "bbd7c17b-342c-42c2-a1f3-cf02ff1c1a25",
+    "seatbid": [
+        {
+            "bid": [
+                {
+                    "id": "",
+                    "impid": "prebid-demo-banner-320-50",
+                    "price": 1,
+                    "adm": "<!-- pubid=1481 siteid=195803 referrerdomain= seatid=8 creativeid=AAAA-BBBB-CCCC --><img src=\"https://assets.adagio.io/creatives/adg_crea_320_50.png\">",
+                    "crid": "adagio_debug_banner_creative_id_320_50",
+                    "w": 320,
+                    "h": 50,
+                    "mtype": 1,
+                    "ext": {
+                        "prebid": {
+                            "meta": {
+                                "adaptercode": "adagio"
+                            },
+                            "targeting": {
+                                "hb_bidder": "adagio",
+                                "hb_bidder_adagio": "adagio",
+                                "hb_env": "mobile-app",
+                                "hb_env_adagio": "mobile-app",
+                                "hb_pb": "1.00",
+                                "hb_pb_adagio": "1.00",
+                                "hb_size": "320x50",
+                                "hb_size_adagio": "320x50"
+                            },
+                            "targetbiddercode": "adagio",
+                            "type": "banner",
+                            "bidid": "d250c3fe-6392-4f06-9683-520e658ff7c7"
+                        }
+                    }
+                }
+            ],
+            "seat": "adagio"
+        }
+    ],
+    "statuscode": 0,
+    "ext": {
+        "prebid": {
+            "auctiontimestamp": 1738828367341,
+            "analytics": {
+                "tags": [
+                    {
+                        "stage": "auction-response",
+                        "module": "adg-pba",
+                        "pba": {
+                            "prebid-demo-banner-320-50": {
+                                "st_id": "8",
+                                "splt_cs_id": "71"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "responsetimemillis": {
+            "adagio": 0
+        }
+    }
+}

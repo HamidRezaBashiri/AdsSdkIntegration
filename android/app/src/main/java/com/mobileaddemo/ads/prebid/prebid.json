@@ -1,0 +1,198 @@
+{
+    "id": "f9792087-3d28-4c15-b525-5f3f7e084dfc",
+    "seatbid": [
+        {
+            "bid": [
+                {
+                    "id": "prebid-demo-response-banner-320-50",
+                    "impid": "f9792087-3d28-4c15-b525-5f3f7e084dfc",
+                    "price": 0.1,
+                    "adm": "<script src=\"https://prebid-mobile-ad-assets.s3.amazonaws.com/scripts/omid-validation-verification-script-v1.js\"></script>\n<a href=\"https://prebid.org/\"><img width=\"320\" height=\"50\" src=\"https://s3.amazonaws.com/files.prebid.org/creatives/prebid320x50.png\"></img></a>",
+                    "crid": "540944516",
+                    "w": 320,
+                    "h": 50,
+                    "ext": {
+                        "prebid": {
+                            "type": "banner",
+                            "targeting": {
+                                "hb_env": "mobile-app",
+                                "hb_cache_host_prebid": "prebid-server-test-j.prebid.org",
+                                "hb_pb_prebid": "0.10",
+                                "hb_bidder_prebid": "prebid",
+                                "hb_cache_id": "10973c4d-eb78-4afc-9864-4d9a8a7e9f36",
+                                "hb_pb": "0.10",
+                                "hb_cache_id_prebid": "10973c4d-eb78-4afc-9864-4d9a8a7e9f36",
+                                "hb_size_prebid": "320x50",
+                                "hb_cache_path": "/cache",
+                                "hb_cache_path_prebid": "/cache",
+                                "hb_size": "320x50",
+                                "hb_bidder": "prebid",
+                                "hb_cache_host": "prebid-server-test-j.prebid.org",
+                                "hb_env_prebid": "mobile-app"
+                            },
+                            "cache": {
+                                "bids": {
+                                    "url": "https://prebid-server-test-j.prebid.org/cache?uuid=10973c4d-eb78-4afc-9864-4d9a8a7e9f36",
+                                    "cacheId": "10973c4d-eb78-4afc-9864-4d9a8a7e9f36"
+                                }
+                            }
+                        },
+                        "origbidcpm": 0.1,
+                        "origbidcur": "USD"
+                    }
+                }
+            ],
+            "seat": "prebid",
+            "group": 0
+        }
+    ],
+    "cur": "USD",
+    "ext": {
+        "debug": {
+            "httpcalls": {
+                "cache": [
+                    {
+                        "uri": "https://prebid-server-test-j.prebid.org/cache",
+                        "requestbody": "{\"puts\":[{\"type\":\"json\",\"value\":{\"id\":\"prebid-demo-response-banner-320-50\",\"impid\":\"f9792087-3d28-4c15-b525-5f3f7e084dfc\",\"price\":0.1,\"adm\":\"<script src=\\\"https://prebid-mobile-ad-assets.s3.amazonaws.com/scripts/omid-validation-verification-script-v1.js\\\"></script>\\n<a href=\\\"https://prebid.org/\\\"><img width=\\\"320\\\" height=\\\"50\\\" src=\\\"https://s3.amazonaws.com/files.prebid.org/creatives/prebid320x50.png\\\"></img></a>\",\"crid\":\"540944516\",\"w\":320,\"h\":50,\"ext\":{\"prebid\":{\"type\":\"banner\"},\"origbidcpm\":0.1,\"origbidcur\":\"USD\"}},\"aid\":\"f9792087-3d28-4c15-b525-5f3f7e084dfc\"}]}",
+                        "responsebody": "{\"responses\":[{\"uuid\":\"10973c4d-eb78-4afc-9864-4d9a8a7e9f36\"}]}",
+                        "requestheaders": {
+                            "Accept": [
+                                "application/json"
+                            ],
+                            "Content-Type": [
+                                "application/json;charset=utf-8"
+                            ]
+                        },
+                        "status": 200
+                    }
+                ]
+            },
+            "resolvedrequest": {
+                "id": "f9792087-3d28-4c15-b525-5f3f7e084dfc",
+                "imp": [
+                    {
+                        "id": "f9792087-3d28-4c15-b525-5f3f7e084dfc",
+                        "banner": {
+                            "format": [
+                                {
+                                    "w": 320,
+                                    "h": 50
+                                }
+                            ]
+                        },
+                        "instl": 0,
+                        "clickbrowser": 0,
+                        "secure": 1,
+                        "ext": {
+                            "prebid": {
+                                "storedauctionresponse": {
+                                    "id": "prebid-demo-response-banner-320-50"
+                                },
+                                "storedrequest": {
+                                    "id": "prebid-demo-banner-320-50"
+                                },
+                                "bidder": {}
+                            },
+                            "tid": "4a42863c-06d8-441f-8750-7b2c5e67105d"
+                        }
+                    }
+                ],
+                "app": {
+                    "name": "MobileAdDemo",
+                    "bundle": "com.hcn.tabletnavigatorpublic",
+                    "ver": "1.0",
+                    "publisher": {
+                        "id": "0689a263-318d-448b-a3d4-b02e8a709d9d",
+                        "ext": {
+                            "prebid": {}
+                        }
+                    },
+                    "ext": {
+                        "prebid": {
+                            "source": "prebid-mobile",
+                            "version": "2.3.1"
+                        }
+                    }
+                },
+                "device": {
+                    "lmt": 0,
+                    "ua": "Mozilla/5.0 (Linux; Android 15; sdk_gphone64_x86_64 Build/AE3A.240806.005; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/132.0.6834.163 Safari/537.36",
+                    "ip": "46.10.220.175",
+                    "devicetype": 5,
+                    "make": "Google",
+                    "model": "sdk_gphone64_x86_64",
+                    "os": "Android",
+                    "osv": "15",
+                    "hwv": "Google sdk_gphone64_x86_64",
+                    "h": 1600,
+                    "w": 2560,
+                    "pxratio": 2,
+                    "language": "en",
+                    "carrier": "T-Mobile",
+                    "mccmnc": "310-260",
+                    "connectiontype": 3,
+                    "ifa": "a17e1b0e-ee04-498b-9df7-db938023e01f"
+                },
+                "user": {},
+                "test": 1,
+                "at": 1,
+                "tmax": 5000,
+                "cur": [
+                    "USD"
+                ],
+                "source": {
+                    "tid": "f9792087-3d28-4c15-b525-5f3f7e084dfc"
+                },
+                "ext": {
+                    "prebid": {
+                        "targeting": {
+                            "pricegranularity": {
+                                "precision": 2,
+                                "ranges": [
+                                    {
+                                        "max": 20,
+                                        "increment": 0.1
+                                    }
+                                ]
+                            },
+                            "includewinners": true,
+                            "includebidderkeys": true
+                        },
+                        "storedrequest": {
+                            "id": "0689a263-318d-448b-a3d4-b02e8a709d9d"
+                        },
+                        "cache": {
+                            "bids": {}
+                        },
+                        "channel": {
+                            "name": "app"
+                        },
+                        "pbs": {
+                            "endpoint": "/openrtb2/auction"
+                        },
+                        "server": {
+                            "externalurl": "https://prebid-server-test-j.prebid.org/",
+                            "datacenter": "local"
+                        }
+                    }
+                }
+            }
+        },
+        "warnings": {
+            "prebid": [
+                {
+                    "code": 999,
+                    "message": "WARNING: request.imp[0].ext must contain at least one valid bidder"
+                }
+            ]
+        },
+        "responsetimemillis": {
+            "cache": 9,
+            "prebid": 0
+        },
+        "tmaxrequest": 5000,
+        "prebid": {
+            "auctiontimestamp": 1738829162695
+        }
+    }
+}
