@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.Gravity
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.events.RCTEventEmitter
 import com.google.android.gms.ads.AdListener
@@ -32,6 +33,9 @@ import org.prebid.mobile.PrebidMobile.setPrebidServerAccountId
 import org.prebid.mobile.PrebidMobile.setPrebidServerHost
 import org.prebid.mobile.api.data.InitializationStatus
 import org.prebid.mobile.TargetingParams
+import org.prebid.mobile.api.rendering.BannerView
+import org.prebid.mobile.api.rendering.listeners.BannerViewListener
+import org.prebid.mobile.eventhandlers.GamBannerEventHandler
 import kotlin.coroutines.resume
 
 class PrebidSDK private constructor(private val context: Context) : AdSDK {
@@ -112,6 +116,17 @@ class PrebidSDK private constructor(private val context: Context) : AdSDK {
             }
         }
         return adView
+    }
+
+    fun createPrebidRenderedAdView(adUnitId: String,configId: String): BannerView {
+        // 1. Create a banner custom event handler for GAM ad server.
+        val eventHandler = GamBannerEventHandler(context, adUnitId, org.prebid.mobile.AdSize(320,50))
+
+        // 2. Create a bannerView instance and provide the GAM event handler
+       val  bannerView = BannerView(context, configId, eventHandler)
+
+        bannerView.loadAd()
+        return bannerView
     }
 
     /**

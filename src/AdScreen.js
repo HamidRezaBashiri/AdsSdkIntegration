@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 import PrebidAdView from './components/PrebidAdView';
+import PrebidRenderedAdView from './components/PrebidRenderedAdView';
 
 const PREBID_CONFIG_ID = 'prebid-demo-banner-320-50';
 const PREBID_GAM_AD_UNIT_ID = '/23200903920/HCN/test_devteamBG_mpu4';
@@ -18,8 +19,9 @@ const FINAL_GAM_AD_UNIT_ID = '/23200903920/HCN/test_devteamBG_mpu3';
 const adData = [
   { id: '1', sdk: 'GMA', adUnitId: GMA_BANNER_AD_UNIT_ID },
   { id: '2', sdk: 'InMobi', adUnitId: INMOBI_BANNER_AD_UNIT_ID },
-  { id: '3', sdk: 'Prebid', configId: "prebid-demo-display-interstitial-320-480", adUnitId: PREBID_GAM_AD_UNIT_ID },
-  { id: '4', sdk: 'FinalAuction', adUnitId: FINAL_GAM_AD_UNIT_ID, configId: PREBID_CONFIG_ID },
+  { id: '3', sdk: 'Prebid', configId: "prebid-demo-display-interstitial-320-480", adUnitId: PREBID_GAM_AD_UNIT_ID }, 
+  { id: '4', sdk: 'PrebidRendered', configId: "prebid-demo-display-interstitial-320-480", adUnitId: PREBID_GAM_AD_UNIT_ID },
+  { id: '5', sdk: 'FinalAuction', adUnitId: FINAL_GAM_AD_UNIT_ID, configId: PREBID_CONFIG_ID },
 ];
 
 const AdScreen = () => {
@@ -77,7 +79,23 @@ const AdScreen = () => {
             />
           </View>
         );
-
+        case 'PrebidRendered':
+          return (
+            <View style={styles.adContainer}>
+              <Text style={styles.sdkName}>Prebid Rendered</Text>
+              <PrebidRenderedAdView
+                key={`prebid-${refreshKey}`}
+                style={{ width: 320, height: 50 }}
+                configId={item.configId}
+                adUnitId={item.adUnitId}
+                onAdLoaded={() => console.log('PrebidRendered Ad Loaded')}
+                onAdFailedToLoad={(error) =>
+                  console.error('PrebidRendered Ad Failed to Load:', error)
+                }
+              />
+            </View>
+          );
+  
       case 'FinalAuction': // New Auction Slot
         return (
           <View style={styles.adContainer}>

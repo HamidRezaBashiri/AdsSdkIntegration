@@ -124,7 +124,10 @@ dependencies {
     implementation("androidx.multidex:multidex:2.0.1")
     implementation ("com.google.android.gms:play-services-ads-identifier:18.1.0")
 
+    // Prebid Mobile SDK
     implementation("org.prebid:prebid-mobile-sdk:2.3.1")
+    // Prebid Mobile SDK GAM Event Handlers
+    implementation("org.prebid:prebid-mobile-sdk-gam-event-handlers:2.3.1")
     // Kotlin Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")

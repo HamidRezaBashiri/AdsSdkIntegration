@@ -25,6 +25,7 @@ import com.mobileaddemo.ads.inmobi.InMobiAdSDK
 import com.mobileaddemo.ads.inmobi.InMobiAdPackage
 import com.mobileaddemo.ads.prebid.PrebidPackage
 import com.mobileaddemo.ads.prebid.PrebidSDK
+import com.mobileaddemo.ads.prebidRendered.PrebidRenderedPackage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -51,6 +52,7 @@ class MainApplication : Application(), ReactApplication {
                 packages.add(GoogleAdPackage())
                 packages.add(InMobiAdPackage())
                 packages.add(PrebidPackage())
+                packages.add(PrebidRenderedPackage())
                 return packages
             }
 
