@@ -66,14 +66,14 @@ class PrebidSDK private constructor(private val context: Context) : AdSDK {
 
         try {
                 // Adagio Prebid Server
-                // PrebidMobile.setPrebidServerAccountId("1481")
-                // PrebidMobile.setPrebidServerHost(Host.createCustomHost("https://mp.4dex.io/pbs/openrtb2/auction"))
-                // PrebidMobile.setCustomStatusEndpoint("https://mp.4dex.io/healthcheck")
+                PrebidMobile.setPrebidServerAccountId("1481")
+                PrebidMobile.setPrebidServerHost(Host.createCustomHost("https://mp.4dex.io/pbs/openrtb2/auction"))
+                PrebidMobile.setCustomStatusEndpoint("https://mp.4dex.io/healthcheck")
                 TargetingParams.setBundleName("com.hcn.tabletnavigatorpublic")
                 // Test Prebid Server
-                PrebidMobile.setPrebidServerAccountId("0689a263-318d-448b-a3d4-b02e8a709d9d")
-                PrebidMobile.setPrebidServerHost(Host.createCustomHost("https://prebid-server-test-j.prebid.org/openrtb2/auction"))
-                PrebidMobile.setIncludeWinnersFlag(true)
+                // PrebidMobile.setPrebidServerAccountId("0689a263-318d-448b-a3d4-b02e8a709d9d")
+                // PrebidMobile.setPrebidServerHost(Host.createCustomHost("https://prebid-server-test-j.prebid.org/openrtb2/auction"))
+                // PrebidMobile.setIncludeWinnersFlag(true)
                 PrebidMobile.setLogLevel(org.prebid.mobile.PrebidMobile.LogLevel.DEBUG)
                 PrebidMobile.setPbsDebug(true)
 
