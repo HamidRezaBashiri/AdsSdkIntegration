@@ -100,7 +100,7 @@ const AdScreen = () => {
         return (
           <View style={styles.adContainer}>
             <Text style={styles.sdkName}>Final GAM Auction</Text>
-            <PrebidAdView
+            <PrebidRenderedAdView
               key={`final-gam-${refreshKey}`}
               style={{ width: 320, height: 50 }}
               configId={item.configId}

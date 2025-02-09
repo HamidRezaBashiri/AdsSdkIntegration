@@ -47,6 +47,7 @@ class PrebidSDK private constructor(private val context: Context) : AdSDK {
         @Volatile
         private var instance: PrebidSDK? = null
 
+
         fun getInstance(context: Context): PrebidSDK =
             instance ?: synchronized(this) {
                 instance ?: PrebidSDK(context.applicationContext).also { instance = it }
