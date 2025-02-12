@@ -1,6 +1,7 @@
 // Updated PrebidSDK.kt
 package com.mobileaddemo.ads.prebid
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
@@ -14,9 +15,11 @@ import com.facebook.react.uimanager.events.RCTEventEmitter
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.admanager.AdManagerAdRequest
 import com.google.android.gms.ads.admanager.AdManagerAdView
 import com.mobileaddemo.ads.core.AdSDK
+import com.mobileaddemo.ads.prebid.MyPrebidWrapper.MyGamBannerEventHandler
 import com.mobileaddemo.ads.prebid.PrebidAdViewManager.Companion.REACT_CLASS
 import io.invertase.googlemobileads.common.SharedUtils.sendEvent
 import kotlinx.coroutines.CoroutineScope
@@ -44,6 +47,7 @@ class PrebidSDK private constructor(private val context: Context) : AdSDK {
         private const val TAG = "PrebidSDK"
         private val DEFAULT_AD_SIZE = AdSize(320, 50)
 
+        @SuppressLint("StaticFieldLeak")
         @Volatile
         private var instance: PrebidSDK? = null
 
@@ -71,6 +75,8 @@ class PrebidSDK private constructor(private val context: Context) : AdSDK {
                 PrebidMobile.setPrebidServerHost(Host.createCustomHost("https://mp.4dex.io/pbs/openrtb2/auction"))
                 PrebidMobile.setCustomStatusEndpoint("https://mp.4dex.io/healthcheck")
                 TargetingParams.setBundleName("com.hcn.tabletnavigatorpublic")
+            PrebidMobile.checkGoogleMobileAdsCompatibility(MobileAds.getVersion().toString())
+
                 // Test Prebid Server
                 // PrebidMobile.setPrebidServerAccountId("0689a263-318d-448b-a3d4-b02e8a709d9d")
                 // PrebidMobile.setPrebidServerHost(Host.createCustomHost("https://prebid-server-test-j.prebid.org/openrtb2/auction"))
@@ -121,8 +127,7 @@ class PrebidSDK private constructor(private val context: Context) : AdSDK {
 
     fun createPrebidRenderedAdView(adUnitId: String,configId: String): BannerView {
         // 1. Create a banner custom event handler for GAM ad server.
-        val eventHandler = GamBannerEventHandler(context, adUnitId, org.prebid.mobile.AdSize(320,50))
-
+        val eventHandler = MyGamBannerEventHandler(context, adUnitId, org.prebid.mobile.AdSize(320,50))
         // 2. Create a bannerView instance and provide the GAM event handler
        val  bannerView = BannerView(context, configId, eventHandler)
 

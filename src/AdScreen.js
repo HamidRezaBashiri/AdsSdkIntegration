@@ -13,15 +13,15 @@ import PrebidRenderedAdView from './components/PrebidRenderedAdView';
 const PREBID_CONFIG_ID = 'prebid-demo-banner-320-50';
 const PREBID_GAM_AD_UNIT_ID = '/23200903920/HCN/test_devteamBG_mpu4';
 const GMA_BANNER_AD_UNIT_ID = '/23200903920/HCN/test_devteamBG_mpu4';
-const INMOBI_BANNER_AD_UNIT_ID = '/23200903920/HCN/test_devteamBG_mpu3';
-const FINAL_GAM_AD_UNIT_ID = '/23200903920/HCN/test_devteamBG_mpu3';
+const INMOBI_BANNER_AD_UNIT_ID = '/23200903920/HCN/test_devteamBG_mpu4';
+const FINAL_GAM_AD_UNIT_ID = '/23200903920/HCN/test_devteamBG_mpu4';
 
 const adData = [
-  { id: '1', sdk: 'GMA', adUnitId: GMA_BANNER_AD_UNIT_ID },
-  { id: '2', sdk: 'InMobi', adUnitId: INMOBI_BANNER_AD_UNIT_ID },
-  { id: '3', sdk: 'Prebid', configId: "prebid-demo-display-interstitial-320-480", adUnitId: PREBID_GAM_AD_UNIT_ID }, 
-  { id: '4', sdk: 'PrebidRendered', configId: "prebid-demo-display-interstitial-320-480", adUnitId: PREBID_GAM_AD_UNIT_ID },
-  { id: '5', sdk: 'FinalAuction', adUnitId: FINAL_GAM_AD_UNIT_ID, configId: PREBID_CONFIG_ID },
+  // { id: '1', sdk: 'GMA', adUnitId: GMA_BANNER_AD_UNIT_ID },
+  // { id: '2', sdk: 'InMobi', adUnitId: INMOBI_BANNER_AD_UNIT_ID },
+  // { id: '3', sdk: 'Prebid', configId: "prebid-demo-display-interstitial-320-480", adUnitId: PREBID_GAM_AD_UNIT_ID }, 
+  { id: '4', sdk: 'PrebidRendered', configId: PREBID_CONFIG_ID, adUnitId: PREBID_GAM_AD_UNIT_ID },
+  // { id: '5', sdk: 'FinalAuction', adUnitId: FINAL_GAM_AD_UNIT_ID, configId: PREBID_CONFIG_ID },
 ];
 
 const AdScreen = () => {
